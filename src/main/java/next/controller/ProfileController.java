@@ -1,6 +1,7 @@
 package next.controller;
 
 import core.db.DataBase;
+import next.Controller;
 import next.model.User;
 
 import javax.servlet.RequestDispatcher;
@@ -12,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet("/users/profile")
-public class ProfileController extends HttpServlet {
+public class ProfileController extends HttpServlet implements Controller {
 	private static final long serialVersionUID = 1L;
 
 	@Override
@@ -25,5 +26,10 @@ public class ProfileController extends HttpServlet {
         req.setAttribute("user", user);
         RequestDispatcher rd = req.getRequestDispatcher("/user/profile.jsp");
         rd.forward(req, resp);
+    }
+
+    @Override
+    public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        return null;
     }
 }

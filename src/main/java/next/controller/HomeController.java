@@ -10,9 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import core.db.DataBase;
+import next.Controller;
 
 @WebServlet("")
-public class HomeController extends HttpServlet {
+public class HomeController extends HttpServlet implements Controller {
     private static final long serialVersionUID = 1L;
     
     @Override
@@ -20,5 +21,10 @@ public class HomeController extends HttpServlet {
         req.setAttribute("users", DataBase.findAll());
         RequestDispatcher rd = req.getRequestDispatcher("index.jsp");
         rd.forward(req, resp);
+    }
+
+    @Override
+    public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        return null;
     }
 }

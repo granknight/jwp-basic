@@ -11,10 +11,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import core.db.DataBase;
+import next.Controller;
 import next.model.User;
 
 @WebServlet(value= {"/users/login", "/users/loginForm"})
-public class LoginController extends HttpServlet {
+public class LoginController extends HttpServlet implements Controller {
     private static final long serialVersionUID = 1L;
 
     @Override
@@ -44,5 +45,10 @@ public class LoginController extends HttpServlet {
     private void forward(String forwardUrl, HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         RequestDispatcher rd = req.getRequestDispatcher(forwardUrl);
         rd.forward(req, resp);
+    }
+
+    @Override
+    public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        return null;
     }
 }
