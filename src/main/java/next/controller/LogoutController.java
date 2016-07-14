@@ -5,13 +5,15 @@ import next.Controller;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-@WebServlet("/users/logout")
+//@WebServlet("/users/logout")
 public class LogoutController extends HttpServlet implements Controller {
     private static final long serialVersionUID = 1L;
 
@@ -23,7 +25,13 @@ public class LogoutController extends HttpServlet implements Controller {
     }
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        return null;
+    public String execute(ServletRequest request, ServletResponse response) throws Exception {
+        HttpServletRequest req = (HttpServletRequest) request;
+        HttpServletResponse resp = (HttpServletResponse) response;
+
+        HttpSession session = req.getSession();
+        session.removeAttribute(UserSessionUtils.USER_SESSION_KEY);
+
+        return "redirect:/";
     }
 }
