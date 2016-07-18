@@ -12,38 +12,34 @@ import java.sql.SQLException;
  */
 public abstract class JdbcTemplate {
 
-    String sql;
-    Connection conn;
     PreparedStatement pstmt;
-    ResultSet rs;
 
-    public JdbcTemplate(Connection conn) {
-        this.conn = conn;
+    public JdbcTemplate() {
+
     }
 
-    public abstract void createQuery() throws SQLException;
 
-    public void update(User user) throws SQLException{
+    public void update() throws SQLException{
         this.pstmt.executeUpdate();
         closeResource();
     }
 
-    public abstract void setValues(User user) throws SQLException;
+    public abstract void setValues(PreparedStatement pstmt) throws SQLException;
 
 
 
     public void closeResource(){
         try {
-            if(rs != null){
-                rs.close();
-            }
+//            if(rs != null){
+//                rs.close();
+//            }
             if (pstmt != null) {
                 pstmt.close();
             }
 
-            if (conn != null) {
-                conn.close();
-            }
+//            if (conn != null) {
+//                conn.close();
+//            }
         }catch(Exception e){
             e.printStackTrace();
         }
