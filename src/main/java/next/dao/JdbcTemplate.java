@@ -23,9 +23,16 @@ public abstract class JdbcTemplate {
 
     public abstract void createQuery() throws SQLException;
 
-    public abstract void update(User user) throws SQLException;
+    public void update(User user) throws SQLException{
+        this.pstmt.executeUpdate();
+        closeResource();
+    }
 
-    public void closeResource(Connection conn, PreparedStatement pstmt, ResultSet rs){
+    public abstract void setValues(User user) throws SQLException;
+
+
+
+    public void closeResource(){
         try {
             if(rs != null){
                 rs.close();

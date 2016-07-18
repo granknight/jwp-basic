@@ -42,71 +42,59 @@ public class UserDao {
 
 	public void insert(User user) throws SQLException {
 
-        InsertJdbcTemplate template = new InsertJdbcTemplate(getConnection()) {
+        JdbcTemplate template = new JdbcTemplate(getConnection()) {
 
             @Override
-            public void createQuery() {
+            public void createQuery() throws SQLException {
+				this.sql = "INSERT INTO USERS VALUES (?, ?, ?, ?)";
+				this.pstmt = this.conn.prepareStatement(this.sql);
+
             }
 
-            @Override
-            public void update(User user) {
-
-            }
-
-            @Override
-            public void setValuesForInsert(User user) throws SQLException {
+			@Override
+			public void setValues(User user) throws SQLException {
                 this.pstmt.setString(1, user.getUserId());
                 this.pstmt.setString(2, user.getPassword());
                 this.pstmt.setString(3, user.getName());
                 this.pstmt.setString(4, user.getEmail());
-            }
+			}
 
-            @Override
-            public void createQueryForInsert() throws SQLException {
-                String sql = "INSERT INTO USERS VALUES (?, ?, ?, ?)";
-                this.pstmt = this.conn.prepareStatement(sql);
-            }
+
         };
-        template.createQueryForInsert();
-        template.setValuesForInsert(user);
+        template.createQuery();
+        template.setValues(user);
 
-        template.executeQuery();
+        template.update(user);
 
 	}
 
 	public void update(User user) throws SQLException {
 
 
-        UpdateJdbcTemplate template = new UpdateJdbcTemplate(getConnection()) {
+		JdbcTemplate template = new JdbcTemplate(getConnection()) {
 
-            @Override
-            public void createQuery() throws SQLException {
+			@Override
+			public void createQuery() throws SQLException {
+				this.sql = "UPDATE USERS SET password=?, name=?, email=? WHERE userId=?";;
+				this.pstmt = this.conn.prepareStatement(this.sql);
 
-            }
+			}
 
-            @Override
-            public void update(User user) throws SQLException {
+			@Override
+			public void setValues(User user) throws SQLException {
+				this.pstmt.setString(4, user.getUserId());
+				this.pstmt.setString(1, user.getPassword());
+				this.pstmt.setString(2, user.getName());
+				this.pstmt.setString(3, user.getEmail());
+			}
 
-            }
 
-            @Override
-            public void setValuesForUpdate(User user) throws SQLException {
-                this.pstmt.setString(1, user.getPassword());
-                this.pstmt.setString(2, user.getName());
-                this.pstmt.setString(3, user.getEmail());
-                this.pstmt.setString(4, user.getUserId());
-            }
+		};
+		template.createQuery();
+		template.setValues(user);
 
-            @Override
-            public void createQueryForUpdate() throws SQLException {
-                String sql = "UPDATE USERS SET password=?, name=?, email=? WHERE userId=?";
-                this.pstmt = this.conn.prepareStatement(sql);
-            }
-        };
-        template.createQueryForUpdate();
-        template.setValuesForUpdate(user);
+		template.update(user);
 
-        template.executeQuery();
 	}
 
 	public List<User> findAll() throws SQLException {
