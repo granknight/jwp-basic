@@ -29,6 +29,13 @@ public class Question {
 		this.countOfComment = countOfComment;
 	}
 
+	public Question(long questionId, String writer, String title, String contents) {
+		this.questionId = questionId;
+		this.writer = writer;
+		this.title = title;
+		this.contents = contents;
+	}
+
 	public long getQuestionId() {
 		return questionId;
 	}

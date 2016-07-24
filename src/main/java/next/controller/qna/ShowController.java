@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import next.dao.AnswerDao;
 import next.dao.QuestionDao;
@@ -11,10 +12,11 @@ import next.model.Answer;
 import next.model.Question;
 import core.mvc.AbstractController;
 import core.mvc.ModelAndView;
+import next.model.User;
 
 public class ShowController extends AbstractController {
-	private QuestionDao questionDao = new QuestionDao();
-	private AnswerDao answerDao = new AnswerDao();
+	private QuestionDao questionDao = QuestionDao.getInstance();
+	private AnswerDao answerDao = AnswerDao.getInstance();
 	private Question question;
 	private List<Answer> answers;
 	
@@ -24,8 +26,20 @@ public class ShowController extends AbstractController {
 		
 		question = questionDao.findById(questionId);
 		answers = answerDao.findAllByQuestionId(questionId);
-		
-		ModelAndView mav = jspView("/qna/show.jsp");
+
+		HttpSession session = req.getSession();
+
+		User user = (User) session.getAttribute("user");
+		ModelAndView mav;
+
+		if(user==null || question.getWriter().equals(user.getName())){
+
+			mav = jspView("/qna/show.jsp");
+		}else {
+			mav = jspView("/qna/show.jsp?login=notmatched");
+		}
+
+
 		mav.addObject("question", question);
 		mav.addObject("answers", answers);
 		return mav;

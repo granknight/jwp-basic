@@ -1,5 +1,26 @@
 // $(".qna-comment").on("click", ".answerWrite input[type=submit]", addAnswer);
 $(".answerWrite input[type=submit]").click(addAnswer);
+$("form[name=answerDeleteForm]").on("click",  ".link-delete-article", deleteAnswer);
+
+function deleteAnswer(e){
+  e.preventDefault();
+  var queryString = $("form[name=answerDeleteForm]").serialize();
+
+  $.ajax({
+    type : 'post',
+    url : '/api/qna/deleteAnswer',
+    data : queryString,
+    dataType : 'json',
+    error: onError,
+    success : dAnswerSuccess
+  });
+}
+
+function dAnswerSuccess(data, status) {
+  var answerId = data.answerId;
+  $("#answer_" + answerId).remove();
+  decreaseAnswerCount();
+}
 
 function addAnswer(e) {
   e.preventDefault();
@@ -17,10 +38,14 @@ function addAnswer(e) {
 }
 
 function onSuccess(json, status){
+  var questionId = json.questionId;
   var answer = json.answer;
   var answerTemplate = $("#answerTemplate").html();
-  var template = answerTemplate.format(answer.writer, new Date(answer.createdDate), answer.contents, answer.answerId, answer.answerId);
+  var template = answerTemplate.format(answer.writer, new Date(answer.createdDate), answer.contents, answer.answerId, questionId);
   $(".qna-comment-slipp-articles").prepend(template);
+
+  increaseAnswerCount();
+  clearInputValue();
 }
 
 function onError(xhr, status) {
@@ -36,3 +61,24 @@ String.prototype.format = function() {
         ;
   });
 };
+
+function increaseAnswerCount(){
+
+  var count = $("#answerCount").text();
+
+  $("#answerCount").text(Number(count) + 1);
+}
+
+function decreaseAnswerCount(){
+
+  var count = $("#answerCount").text();
+
+  $("#answerCount").text(Number(count) - 1);
+}
+
+function clearInputValue(){
+
+  $("#contents").text("");
+  $("#writer").val("");
+
+}

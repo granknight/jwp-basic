@@ -6,6 +6,11 @@
 <html lang="kr">
 <head>
 	<%@ include file="/include/header.jspf" %>
+	<script type="text/javascript">
+		if("${param.login}" === "notlogin" ){
+			alert("로그인해야 작성가능합니다.");
+		}
+	</script>
 </head>
 <body>
 <%@ include file="/include/navigation.jspf" %>
