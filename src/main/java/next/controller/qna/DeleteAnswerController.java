@@ -5,7 +5,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import next.dao.AnswerDao;
 import next.dao.QuestionDao;
-import next.model.Question;
 import next.model.Result;
 import core.jdbc.DataAccessException;
 import core.mvc.AbstractController;

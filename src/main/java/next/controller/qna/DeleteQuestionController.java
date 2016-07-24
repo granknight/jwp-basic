@@ -1,10 +1,7 @@
 package next.controller.qna;
 
-import com.sun.tools.internal.ws.processor.model.Model;
 import core.mvc.AbstractController;
 import core.mvc.ModelAndView;
-import core.mvc.View;
-import next.dao.AnswerDao;
 import next.dao.QuestionDao;
 import next.model.Question;
 import next.model.Result;
@@ -18,8 +15,6 @@ import javax.servlet.http.HttpSession;
  * Created by granknight on 2016. 7. 25..
  */
 public abstract class DeleteQuestionController extends AbstractController {
-
-    AnswerDao answerDao = AnswerDao.getInstance();
 
     QuestionDao questionDao = QuestionDao.getInstance();
 
@@ -45,6 +40,8 @@ public abstract class DeleteQuestionController extends AbstractController {
             }catch(Exception e){
                 mv = getView(Result.fail("failed"));
             }
+        }else{
+            mv = getView(Result.fail("cantAccess"));
         }
 
         return mv;
