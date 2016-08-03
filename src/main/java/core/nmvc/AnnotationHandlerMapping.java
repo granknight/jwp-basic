@@ -11,6 +11,7 @@ import com.google.common.collect.Maps;
 
 import core.annotation.RequestMapping;
 import core.annotation.RequestMethod;
+import org.reflections.ReflectionUtils;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,32 +35,32 @@ public class AnnotationHandlerMapping {
 
             Set<Class<?>> controllers = reflections.getTypesAnnotatedWith(core.annotation.Controller.class);
 
-//            for(Class controller : controllers){
-//
-//                Set<Method> methods = reflections.getMethodsAnnotatedWith(core.annotation.RequestMapping.class);
-//
-//                //Set<Class<?>> annotations = reflections.getTypesAnnotatedWith(core.annotation.RequestMapping.class);
-//
-//
-//
-//            }
+            for(Class controller : controllers){
 
-            Set<Method> methods = reflections.getMethodsAnnotatedWith(core.annotation.RequestMapping.class);
+                Class<RequestMapping> requestMappingClass = RequestMapping.class;
 
-            for(Method method : methods){
-                RequestMapping requestMapping = method.getAnnotation(core.annotation.RequestMapping.class);
+                Set<Method> methods = ReflectionUtils.getMethods(controller, ReflectionUtils.withAnnotation(requestMappingClass));
 
-                String url = requestMapping.value();
-                RequestMethod requestMethod = requestMapping.method();
+                for(Method method : methods){
+                    RequestMapping requestMapping = method.getAnnotation(requestMappingClass);
 
-                HandlerKey handlerKey = new HandlerKey(url, requestMethod);
+                    String url = requestMapping.value();
+                    RequestMethod requestMethod = requestMapping.method();
 
+                    HandlerKey handlerKey = new HandlerKey(url, requestMethod);
 
-
+                    //handlerExecutions.put(handlerKey, new HandlerExecution());
+                }
 
             }
 
+
+
+
+
         }
+
+    }
 
 //        for(Object obj : basePackage){
 //            Reflections reflections = new Reflections(String.valueOf(obj));
@@ -69,7 +70,7 @@ public class AnnotationHandlerMapping {
 //                log.debug("Method  :: {}", method);
 //            }
 //        }
-    }
+
 
 	public HandlerExecution getHandler(HttpServletRequest request) {
 		String requestUri = request.getRequestURI();
