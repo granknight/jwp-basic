@@ -30,6 +30,8 @@ public class AnnotationHandlerMapping {
 	}
 	
     public void initialize() {
+
+
         for(Object obj : basePackage){
             Reflections reflections = new Reflections(String.valueOf(obj));
 
